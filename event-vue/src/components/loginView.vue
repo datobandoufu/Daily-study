@@ -2,7 +2,7 @@
 	<div class="log_container">
 		<div class="box">
 			<div class="title_box"></div>
-			<el-form :model="logForm" status-icon :rules="rules" ref="logForm">
+			<el-form :model="logForm" status-icon :rules="rules" ref="logRef">
 				<el-form-item prop="username">
 					<el-input
 						placeholder="请输入用户名"
@@ -17,7 +17,9 @@
 					></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" class="btn_box">登录</el-button>
+					<el-button type="primary" class="btn_box" @click="logFn"
+						>登录</el-button
+					>
 					<el-link type="info" @click="toRegFn">去注册</el-link>
 				</el-form-item>
 			</el-form>
@@ -26,14 +28,15 @@
 </template>
 
 <script>
+import { loginApi } from "../api";
+
 export default {
 	name: "loginView",
 	data() {
 		return {
 			logForm: {
 				username: "",
-				password: "",
-				repassword: ""
+				password: ""
 			},
 			rules: {
 				username: [
@@ -58,6 +61,17 @@ export default {
 	methods: {
 		toRegFn() {
 			this.$router.push("/reg");
+		},
+		logFn() {
+			this.$refs.logRef.validate(async valid => {
+				if (!valid) return false;
+
+				const { data: res } = await loginApi(this.logForm);
+				if (res.code !== 0) return this.$message.error(res.message);
+
+				this.$message.success(res.message);
+				this.$router.push("/main");
+			});
 		}
 	}
 };

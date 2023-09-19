@@ -1,8 +1,24 @@
-import request from "@/request";
+import request from "@/request/index.js";
 
-export const getLogInfoApi = () => {
+export const loginApi = ({ username, password }) => {
 	return request({
 		method: "POST",
-		url: "/api/login"
+		url: "/api/login",
+		data: {
+			username,
+			password
+		}
+	});
+};
+
+export const registerApi = ({ username, password, repassword }) => {
+	return request({
+		method: "POST",
+		url: "/api/reg",
+		data: {
+			username,
+			password,
+			repassword
+		}
 	});
 };

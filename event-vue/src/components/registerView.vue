@@ -2,7 +2,7 @@
 	<div class="reg_container">
 		<div class="box">
 			<div class="title_box"></div>
-			<el-form :model="regForm" :rules="rules" ref="regForm" status-icon>
+			<el-form :model="regForm" :rules="rules" ref="regRef" status-icon>
 				<el-form-item prop="username">
 					<el-input
 						placeholder="请输入用户名"
@@ -24,7 +24,9 @@
 					></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" class="btn_box">立即注册</el-button>
+					<el-button type="primary" class="btn_box" @click="regNewUserFn"
+						>立即注册</el-button
+					>
 					<el-link type="info" @click="toLogFn">去登录</el-link>
 				</el-form-item>
 			</el-form>
@@ -33,13 +35,13 @@
 </template>
 
 <script>
+import { registerApi } from "../api/index.js";
+
 export default {
 	name: "registerView",
 	data() {
 		const checkPass = (rule, value, callback) => {
-			if (value === "") {
-				callback(new Error("请再次输入密码"));
-			} else if (value !== this.regForm.password) {
+			if (value !== this.regForm.password) {
 				callback(new Error("两次输入密码不一致!"));
 			} else {
 				callback();
@@ -87,7 +89,21 @@ export default {
 	methods: {
 		toLogFn() {
 			this.$router.push("/login");
+		},
+		regNewUserFn() {
+			this.$refs.regRef.validate(async valid => {
+				if (!valid) return false;
+
+				const { data: res } = await registerApi(this.regForm);
+				if (res.code !== 0) return this.$message.error(res.message);
+
+				this.$message.success(res.message);
+				this.$router.push("/login");
+			});
 		}
+	},
+	mounted() {
+		// console.log(this);
 	}
 };
 </script>
