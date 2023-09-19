@@ -2,12 +2,19 @@
 	<div class="log_container">
 		<div class="box">
 			<div class="title_box"></div>
-			<el-form>
-				<el-form-item>
-					<el-input placeholder="请输入用户名"></el-input>
+			<el-form :model="logForm" status-icon :rules="rules" ref="logForm">
+				<el-form-item prop="username">
+					<el-input
+						placeholder="请输入用户名"
+						v-model="logForm.username"
+					></el-input>
 				</el-form-item>
-				<el-form-item>
-					<el-input placeholder="请输入密码"></el-input>
+				<el-form-item prop="password">
+					<el-input
+						type="password"
+						placeholder="请输入密码"
+						v-model="logForm.password"
+					></el-input>
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" class="btn_box">登录</el-button>
@@ -22,7 +29,31 @@
 export default {
 	name: "loginView",
 	data() {
-		return {};
+		return {
+			logForm: {
+				username: "",
+				password: "",
+				repassword: ""
+			},
+			rules: {
+				username: [
+					{ required: true, message: "请输入用户名", trigger: "blur" },
+					{
+						pattern: /^[a-zA-Z0-9]{1,10}$/,
+						message: "请输入1-10位的大小写字母数字",
+						trigger: "blur"
+					}
+				],
+				password: [
+					{ required: true, message: "请输入密码", trigger: "blur" },
+					{
+						pattern: /^\S{6,15}$/,
+						message: "请输入6-15位的非空字符串",
+						trigger: "blur"
+					}
+				]
+			}
+		};
 	},
 	methods: {
 		toRegFn() {
@@ -38,10 +69,12 @@ export default {
 	background: url("../assets/images/login_bg.jpg") center;
 	background-size: cover;
 }
+
 .title_box {
 	height: 60px;
 	background: url("../assets/images/login_title.png") no-repeat center;
 }
+
 .box {
 	width: 400px;
 	height: 270px;

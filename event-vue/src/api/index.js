@@ -1,5 +1,8 @@
 import request from "@/request";
 
-export const getInfoApi = () => {
-	return request({});
+export const getLogInfoApi = () => {
+	return request({
+		method: "POST",
+		url: "/api/login"
+	});
 };
