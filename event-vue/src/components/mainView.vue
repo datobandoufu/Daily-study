@@ -10,11 +10,8 @@
 			>
 				<el-submenu index="1">
 					<template slot="title">
-						<img
-							src="../assets/images/head.png"
-							alt=""
-							class="avatar"
-						/>个人中心
+						<img :src="userpic" alt="" class="avatar" v-if="userpic" />
+						<img src="../assets/images/logo.png" alt="" v-else />个人中心
 					</template>
 					<el-menu-item index="1-1"
 						><i class="el-icon-s-operation"></i>基本资料</el-menu-item
@@ -38,31 +35,45 @@
 				<div class="aside-box">
 					<img :src="userpic" alt="" class="avatar" v-if="userpic" />
 					<img src="../assets/images/logo.png" alt="" v-else />
-					<span>欢迎{{ nickname || username }}</span>
+					<span>欢迎 {{ nickname || username }}</span>
 				</div>
 				<el-col>
-					<template>
-						<el-menu
-							backgroundColor="#23262e"
-							text-color="#fff"
-							active-text-color="#409EFF"
-							unique-opened
-						>
-							<el-menu-item index="1">
-								<i class="el-icon-s-home"></i>
-								<span slot="title">首页</span>
+					<el-menu
+						:default-active="$route.path"
+						backgroundColor="#23262e"
+						text-color="#fff"
+						active-text-color="#409EFF"
+						unique-opened
+						router
+					>
+						<template v-for="item in meus">
+							<el-menu-item
+								:index="item.indexPath"
+								v-if="!item.children"
+								:key="item.indexPath"
+							>
+								<i :class="item.icon"></i>
+								<span slot="title">{{ item.title }}</span>
 							</el-menu-item>
-							<el-submenu index="2">
+							<el-submenu
+								:index="item.indexPath"
+								:key="item.indexPath"
+								v-else
+							>
 								<template slot="title">
-									<i class="el-icon-s-order"></i>
-									<span>文章管理</span>
+									<i :class="item.icon"></i>
+									<span>{{ item.title }}</span>
 								</template>
-								<el-menu-item index="2-1">
-									<i class="el-icon-s-data"></i>文章分类
+								<el-menu-item
+									:index="subitem.indexPath"
+									:key="subitem.indexPath"
+									v-for="subitem in item.children"
+								>
+									<i :class="subitem.icon"></i>{{ subitem.title }}
 								</el-menu-item>
 							</el-submenu>
-						</el-menu>
-					</template>
+						</template>
+					</el-menu>
 				</el-col>
 			</el-aside>
 			<el-container>
@@ -154,5 +165,11 @@ export default {
 	height: 35px;
 	border-radius: 35px;
 	margin: 0 10px 0 0;
+}
+
+.el-main {
+	overflow-y: scroll;
+	height: 0;
+	background-color: #f2f2f2;
 }
 </style>
