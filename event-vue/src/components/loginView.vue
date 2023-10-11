@@ -29,6 +29,7 @@
 
 <script>
 import { loginApi } from "../api";
+import { mapMutations } from "vuex";
 
 export default {
 	name: "loginView",
@@ -59,6 +60,7 @@ export default {
 		};
 	},
 	methods: {
+		...mapMutations(["updateToken"]),
 		toRegFn() {
 			this.$router.push("/reg");
 		},
@@ -70,6 +72,7 @@ export default {
 				if (res.code !== 0) return this.$message.error(res.message);
 
 				this.$message.success(res.message);
+				this.updateToken(res.token);
 				this.$router.push("/main");
 			});
 		}

@@ -15,6 +15,13 @@ module.exports = {
 		quotes: ["error", "double", { avoidEscape: true }],
 		semi: ["error", "always"],
 		"comma-dangle": ["error", "never"],
-		"space-before-function-paren": ["error", "never"]
+		"space-before-function-paren": [
+			"error",
+			{
+				anonymous: "always",
+				named: "never",
+				asyncArrow: "never"
+			}
+		]
 	}
 };

@@ -22,3 +22,17 @@ export const registerApi = ({ username, password, repassword }) => {
 		}
 	});
 };
+
+export const getUserInfoApi = () => {
+	return request({
+		method: "GET",
+		url: "/my/userinfo"
+	});
+};
+
+export const getMeusApi = () => {
+	return request({
+		method: "GET",
+		url: "/my/menus"
+	});
+};
